@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="da">
+<head>
+    <meta charset="UTF-8" />
+    <title>Sanitizer demo uden regex (Vue)</title>
+
+    <script src="https://unpkg.com/vue@3"></script>
+
+   
+</head>
+<body>
+
+    <h2>Vue opgave 2 </h2>
+
+    <div id="app">
+        <textarea v-model="userInput" placeholder="Skriv f.eks.  <script>alert(1)</script>">
+        </textarea>
+
+        <h3>Original input</h3>
+        <pre>{{ userInput }}</pre>
+
+        <h3>Saniteret output (HTML efter rensning)</h3>
+        <pre>{{ sanitizedText }}</pre>
+    </div>
+
+    <script>
+        //Oprettelse af vueapp
+        const app = Vue.createApp({
+            data() {
+                return {
+                    userInput: "",  // brugertekst
+                    sanitizedText: "" //rettet tekst
+                };
+            },
+
+            // Watcher ser på brugeren indhold hver gang der bliver skrevet noget
+            // Kaleder sanitize funktion
+            watch: {
+                userInput(newValue) {
+                    this.sanitizedText = this.sanitize(newValue);
+                }
+            },
+
+            methods: {
+
+
+                sanitize(text) {
+                    // Laver et tomt div element
+                    const container = document.createElement("div");
+
+                    // Indsætter så brugeren tekst
+                    container.innerHTML = text;
+
+                    // Fjerner alle script tags
+                    const scripts = container.querySelectorAll("script");
+                    scripts.forEach(script => script.remove());
+
+                    // Fjern allElements som onerror, onclick, onload o.l.
+                    const allElements = container.querySelectorAll("*");
+                    allElements.forEach(el => {
+                        // Kigger på attributterne
+                        const attrs = Array.from(el.attributes);
+                        attrs.forEach(attr => {
+                             // Tjekker om navnet starter med "on"
+                            if (attr.name.toLowerCase().startsWith("on")) {
+                                // Hvis den gør såå fjjerner vi den
+                                el.removeAttribute(attr.name);
+                            }
+                        });
+                    });
+
+                    // Sender dem santized tekst tilbage - Altså ingen scripts eller events
+                    return container.innerHTML;
+                }
+            },
+        });
+
+        // vue finder ide svarende til app
+        app.mount("#app");
+    </script>
+
+</body>
+</html>
