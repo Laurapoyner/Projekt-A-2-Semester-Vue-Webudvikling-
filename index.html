@@ -2,7 +2,7 @@
 <html lang="da">
 <head>
     <meta charset="UTF-8" />
-    <title>Sanitizer demo uden regex (Vue)</title>
+    <title>Vue opgave 2</title>
 
     <script src="https://unpkg.com/vue@3"></script>
 
@@ -16,10 +16,10 @@
         <textarea v-model="userInput" placeholder="Skriv f.eks.  <script>alert(1)</script>">
         </textarea>
 
-        <h3>Original input</h3>
+        <h3>Bruger input</h3>
         <pre>{{ userInput }}</pre>
 
-        <h3>Saniteret output (HTML efter rensning)</h3>
+        <h3>Brugerens renset output</h3>
         <pre>{{ sanitizedText }}</pre>
     </div>
 
@@ -33,7 +33,7 @@
                 };
             },
 
-            // Watcher ser på brugeren indhold hver gang der bliver skrevet noget
+            // Watcher ser pï¿½ brugeren indhold hver gang der bliver skrevet noget
             // Kaleder sanitize funktion
             watch: {
                 userInput(newValue) {
@@ -48,7 +48,7 @@
                     // Laver et tomt div element
                     const container = document.createElement("div");
 
-                    // Indsætter så brugeren tekst
+                    // Indsï¿½tter sï¿½ brugeren tekst
                     container.innerHTML = text;
 
                     // Fjerner alle script tags
@@ -58,18 +58,18 @@
                     // Fjern allElements som onerror, onclick, onload o.l.
                     const allElements = container.querySelectorAll("*");
                     allElements.forEach(el => {
-                        // Kigger på attributterne
+                        // Kigger pï¿½ attributterne
                         const attrs = Array.from(el.attributes);
                         attrs.forEach(attr => {
                              // Tjekker om navnet starter med "on"
                             if (attr.name.toLowerCase().startsWith("on")) {
-                                // Hvis den gør såå fjjerner vi den
+                                // Hvis den gï¿½r sï¿½ï¿½ fjjerner vi den
                                 el.removeAttribute(attr.name);
                             }
                         });
                     });
 
-                    // Sender dem santized tekst tilbage - Altså ingen scripts eller events
+                    // Sender dem santized tekst tilbage - Altsï¿½ ingen scripts eller events
                     return container.innerHTML;
                 }
             },
